@@ -1,0 +1,1058 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced.
+     An alternate method (rfc include) is described in the references. -->
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC6241 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6241.xml">
+<!ENTITY RFC7950 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml">
+<!ENTITY RFC7149 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7149.xml">
+<!ENTITY RFC7426 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7426.xml">
+<!ENTITY RFC8299 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8299.xml">
+<!ENTITY RFC8309 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8309.xml">
+<!ENTITY RFC8340 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8340.xml">
+<!ENTITY RFC8453 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8453.xml">
+<!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
+<!ENTITY RFC8345 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8345.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="std" docName="draft-ma-netmod-immutable-flag-08"
+     ipr="trust200902">
+  <front>
+    <title abbrev="Immutable Flag">YANG Extension and Metadata Annotation for
+    Immutable Flag</title>
+
+    <author fullname="Qiufang Ma" initials="Q." surname="Ma">
+      <organization>Huawei</organization>
+
+      <address>
+        <postal>
+          <street>101 Software Avenue, Yuhua District</street>
+
+          <city>Nanjing</city>
+
+          <region>Jiangsu</region>
+
+          <code>210012</code>
+
+          <country>China</country>
+        </postal>
+
+        <email>maqiufang1@huawei.com</email>
+      </address>
+    </author>
+
+    <author fullname="Qin Wu" initials="Q." surname="Wu">
+      <organization>Huawei</organization>
+
+      <address>
+        <postal>
+          <street>101 Software Avenue, Yuhua District</street>
+
+          <city>Nanjing</city>
+
+          <region>Jiangsu</region>
+
+          <code>210012</code>
+
+          <country>China</country>
+        </postal>
+
+        <email>bill.wu@huawei.com</email>
+      </address>
+    </author>
+
+    <author fullname="Balazs Lengyel" initials="B." surname="Lengyel">
+      <organization abbrev="Ericsson">Ericsson</organization>
+
+      <address>
+        <email>balazs.lengyel@ericsson.com</email>
+      </address>
+    </author>
+
+    <author fullname="Hongwei Li" initials="H." surname="Li">
+      <organization>HPE</organization>
+
+      <address>
+        <email>flycoolman@gmail.com</email>
+      </address>
+    </author>
+
+    <date year="2023"/>
+
+    <area>ops</area>
+
+    <workgroup>NETMOD</workgroup>
+
+    <keyword>immutable read-only NETMOD</keyword>
+
+    <abstract>
+      <t>This document defines a way to formally document existing behavior,
+      implemented by servers in production, on the immutability of some
+      configuration nodes, using a YANG "extension" and a YANG metadata
+      annotation, both called "immutable", which are collectively used to flag
+      which data nodes are immutable.</t>
+
+      <t>Clients may use "immutable" statements in the YANG, and annotations
+      provided by the server, to know beforehand when certain otherwise valid
+      configuration requests will cause the server to return an error.</t>
+
+      <t>The immutable flag is descriptive, documenting existing behavior, not
+      proscriptive, dictating server behavior.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="Introduction" title="Introduction">
+      <t>This document defines a way to formally document as a YANG extension
+      or YANG metadata an existing model handling behavior that is already
+      allowed in YANG and has been used by multiple standard organizations and
+      vendors. It is the aim to create one single standard solution for
+      documenting modification restrictions on data declared as configuration,
+      instead of the multiple existing vendor and organization specific
+      solutions. See <xref target="Existing_implementations"/> for existing
+      implementations.</t>
+
+      <t>YANG <xref target="RFC7950"/> is a data modeling language used to
+      model both state and configuration data, based on the "config"
+      statement. However there exists data that cannot be modified by the
+      client (it is immutable), but still needs to be declared as "config
+      true" to: <list style="symbols">
+          <t>allow configuration of data nodes under immutable lists or
+          containers;</t>
+
+          <t>place "when", "must" and "leafref" constraints between
+          configuration and immutable data nodes.</t>
+
+          <t>ensure the existence of specific list entries that are provided
+          and needed by the system, while additional list entries can be
+          created, modified or deleted;</t>
+        </list>The server's rejection of the operation request may cause the
+      network management automation to be broken with no way for the client to
+      fix it. If the server knows that it will always reject the modification
+      because it internally think it immutable, it should document this
+      towards the clients in a machine-readable way. In some implementation,
+      the server don't reject the client operation but mark it as "inactive"
+      and not in use, client still need to know?</t>
+
+      <t>This document defines a way to formally document existing behavior,
+      implemented by servers in production, on the immutability of some
+      configuration nodes, using a YANG "extension" <xref target="RFC7950"/>
+      and a YANG metadata annotation <xref target="RFC7952"/>, both called
+      "immutable", which are collectively used to flag which data nodes are
+      immutable.</t>
+
+      <t>The "immutable" YANG extension is used when the behavior can be
+      described at the schema-level, while the "immutable" metadata annotation
+      is used when the behavior must be described at the YANG "list" or
+      "leaf-list" instance level.</t>
+
+      <t>Comment: Should the "immutable" metadata annotation also be returned
+      for nodes described as immutable in the YANG schema?</t>
+
+      <t>Immutability is an existing model handling practice. While in some
+      cases it is needed, it also has disadvantages, therefore it SHOULD be
+      avoided wherever possible.</t>
+
+      <t>The following is a list of already implemented and potential use
+      cases. <list style="format UC%d">
+          <t>Modeling of server capabilities</t>
+
+          <t>HW based auto-configuration</t>
+
+          <t>Predefined Access control Rules</t>
+
+          <t>Declaring System defined configuration unchangeable</t>
+
+          <t>Modeling existing data handling behavior in other standard
+          organizations</t>
+        </list> <xref target="detailed_use_cases"/> describes the use cases in
+      detail.</t>
+
+      <section anchor="terminology" title="Terminology">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in BCP
+        14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only
+        when, they appear in all capitals, as shown here.</t>
+
+        <t>The following terms are defined in <xref target="RFC6241"/>: <list
+            style="symbols">
+            <t>configuration data</t>
+          </list>The following terms are defined in <xref target="RFC7950"/>:
+        <list style="symbols">
+            <t>data node</t>
+
+            <t>leaf</t>
+
+            <t>leaf-list</t>
+
+            <t>container</t>
+
+            <t>list</t>
+
+            <t>anydata</t>
+
+            <t>anyxml</t>
+
+            <t>interior node</t>
+
+            <t>data tree</t>
+          </list>The following terms are defined in <xref target="RFC8341"/>:
+        <list style="symbols">
+            <t>access operation</t>
+
+            <t>write access</t>
+          </list></t>
+
+        <t>The following terms are defined in this document:<list
+            style="hanging">
+            <t hangText="immutable flag: ">A read-only state value the server
+            provides to describe data it considers immutable. In schema, the
+            immutability of data nodes is conveyed via a YANG "extension"
+            statement. In instance representations, the immutability of data
+            nodes is conveyed via a YANG metadata annotation. Both the
+            extension statement and the metadata annotation are called
+            "immutable". Together, they are alternative ways to express the
+            same behavior.<vspace blankLines="1"/></t>
+          </list></t>
+      </section>
+
+      <section title="Applicability">
+        <t>There is a desire to always allow a client to move from one valid
+        configuration to another valid configuration in a single transaction.
+        This document focuses on the immutable configuration which can only be
+        created, updated and deleted by the server and intends to have no
+        impact to &lt;running&gt; by default.</t>
+
+        <t>The "immutable" concept defined in this document only documents
+        existing write access restrictions to writable datastores. The
+        immutable annotation information is also visible even in read-only
+        datastores like &lt;system&gt; (if exists), &lt;intended&gt; and
+        &lt;operational&gt; when a "with-immutable" parameter is carried (see
+        <xref target="with-immutable"/>), however this only serves as
+        descriptive information about the instance node itself, but has no
+        effect on the handling of the read-only datastore.</t>
+
+        <t>A particular data node or instance has the same immutability in all
+        writable datastores. The immutability of data nodes is protocol and
+        user independent. The immutability and configured value of an existing
+        node must only change by hardware/software update or license
+        change.</t>
+      </section>
+    </section>
+
+    <section title="Solution Overview">
+      <t>Already some servers handle immutable configuration data and will
+      reject any attempt to the update of such data. This document allows the
+      existing immutable data node or instance to be formally documented by
+      YANG extension or metadata annotation rather than be written as plain
+      text in the description statement.</t>
+
+      <t>Servers reject client's request for updating configuration data when
+      it internally think it immutable. The error reporting is performed
+      immediately at an &lt;edit-config&gt; operation time, regardless what
+      the target configuration datastore is. For an example of an
+      "invalid-value" error response, see <xref target="error-update"/>. Some
+      implementation may accept the client's request for updating immutable
+      configuration data but simply mark it as "inactive" and remove it before
+      applied.</t>
+
+      <t>It MUST be allowed if the operation on the immutable node has no
+      effective change, e.g., if a leaf has a current value of "5" it should
+      be allowed to replace it with a value of "5".</t>
+
+      <t>A client may create/delete immutable nodes with same values as found
+      in &lt;operational&gt; or &lt;system&gt; (if exists) in read-write
+      configuration datastore (e.g., &lt;running&gt;), which merely mean
+      making immutable nodes visible/invisible in read-write configuration
+      datastore (e.g., &lt;running&gt;).</t>
+
+      <t>Servers adding the immutable property which does not have any
+      additional semantic meaning is discouraged. For example, a key leaf that
+      is given a value and cannot be modified once a list entry is
+      created.</t>
+
+      <t>The "immutable" flag is intended to be descriptive.</t>
+    </section>
+
+    <section title="Use of &quot;immutable&quot; for Different Statements">
+      <t>This section defines what the immutable flag means to the client for
+      each YANG data node statement. Whilst this section describes
+      immutability at the schema level, it applies equally to when the
+      immutable flag is set via the metadata annotation on data nodes.</t>
+
+      <t>Throughout this section, the word "change" refers to add, edit, and
+      delete.</t>
+
+      <section title="The &quot;leaf&quot; Statement">
+        <t>When a leaf node is immutable, its value cannot change effectively
+        on a device.</t>
+      </section>
+
+      <section title="The &quot;leaf-list&quot; Statement">
+        <t>When a leaf-list data node is immutable, its value cannot change
+        effectively on a device.</t>
+
+        <t>When the "immutable" YANG extension statement is used on a
+        leaf-list data node, or if a leaf-list inherits immutability from an
+        ancestor, it means that the leaf-list as a whole cannot change:
+        entries cannot be added, removed, or reordered, in case the leaf-list
+        is "ordered-by user".</t>
+      </section>
+
+      <section title="The &quot;container&quot; Statement">
+        <t>When a container data node is immutable, its instance cannot change
+        effectively on a device, unless the immutability of its descendant
+        node is toggled.</t>
+
+        <t>By default, as with all interior nodes, immutability is recursively
+        applied to descendants (see <xref
+        target="interior_immutability"/>).</t>
+      </section>
+
+      <section title="The &quot;list&quot; Statement">
+        <t>When a list data node is immutable, its instance cannot change
+        effectively on a device, unless the immutability of its descendant
+        node is toggled, per the description elsewhere in this section.</t>
+
+        <t>By default, as with all interior nodes, immutability is recursively
+        applied to descendants (see <xref target="interior_immutability"/>).
+        This statement is applicable only to the "immutable" YANG extension,
+        as the "list" node does not itself appear in data trees.</t>
+      </section>
+
+      <section title="The &quot;anydata&quot; Statement">
+        <t>When an anydata data node is immutable, its instance cannot change
+        effectively on a device. Additionally, as with all interior nodes,
+        immutability is recursively applied to descendants (see <xref
+        target="interior_immutability"/>).</t>
+
+        <t>Descendants for anydata data node is unknown at module design time,
+        they cannot reset the immutability state with "immutable" YANG
+        extension.</t>
+      </section>
+
+      <section title="The &quot;anyxml&quot; Statement">
+        <t>When a "anyxml" data node is immutable, its instance cannot change
+        effectively on a device. Additionally, as with all interior nodes,
+        immutability is recursively applied to descendants (see <xref
+        target="interior_immutability"/>).</t>
+
+        <t>Descendants for anyxml data node is unknown at module design time,
+        they cannot reset the immutability state with "immutable" YANG
+        extension.</t>
+      </section>
+    </section>
+
+    <section anchor="interior_immutability"
+             title="Immutability of Interior Nodes">
+      <t>Immutability is a conceptual operational state value that is
+      recursively applied to descendants, which may reset the immutability
+      state as needed, thereby affecting their descendants. There is no limit
+      to the number of times the immutability state may change in a data
+      tree.</t>
+
+      <t>For example, given the following application configuration XML
+      snippets: <figure>
+          <artwork>&lt;application im:immutable="true"&gt;
+  &lt;name&gt;predefined-ftp&lt;/name&gt;
+  &lt;protocol&gt;ftp&lt;/protocol&gt;
+  &lt;port-number im:immutable="false"&gt;69&lt;/port-number&gt;
+&lt;/application&gt;</artwork>
+        </figure>The list entry named "predefined-ftp" is immutable=true, but
+      its child node "port-number" has the immutable=false (thus the client
+      can change this value). The other child node "protocol" not specifying
+      the immutability explicitly inherits immutability from its parent node
+      thus also immutable=true.</t>
+    </section>
+
+    <section title="&quot;Immutable&quot; YANG Extension">
+      <section title="Definition">
+        <t>If servers always reject client modification attempts to some data
+        node that they internally think immutable and irrelevant to its
+        instance data, an "immutable" YANG extension can be used to formally
+        indicate to the clients.</t>
+
+        <t>The "immutable" YANG extension can be a substatement to a "config
+        true" leaf, leaf-list, container, list, anydata or anyxml statement.
+        It has no effect if used as a substatement to a "config false" node,
+        but can be allowed anyway.</t>
+
+        <t>The "immutable" YANG extension defines an argument statement named
+        "value" which is a boolean type to indicate that whether the node is
+        immutable or not. If the "immutable" YANG extension is not specified
+        for a particular data node, the default immutability is the same as
+        that of its parent node. The immutability for a top-level data node is
+        false by default.</t>
+      </section>
+    </section>
+
+    <section title="&quot;Immutable&quot; Metadata Annotation">
+      <section title="Definition">
+        <t>If servers always reject clients modification to some particular
+        instance that they internally think immutable, an "immutable" metadata
+        annotation can be used to formally indicate to the clients.</t>
+
+        <t>The "immutable" metadata annotation takes as an value which is a
+        boolean type, it is not returned unless a client explicitly requests
+        through a "with-immutable" parameter (see <xref
+        target="with-immutable"/>). If the "immutable" metadata annotation for
+        data node instances is not specified, the default "immutable" value is
+        the same as the immutability of its parent node in the data tree. The
+        immutable metadata annotation value for a top-level instance node is
+        false if not specified.</t>
+
+        <t>Note that "immutable" metadata annotation is used to annotate data
+        node instances. A list may have multiple entries/instances in the data
+        tree, "immutable" can annotate some of the instances as read-only,
+        while others are read-write.</t>
+      </section>
+
+      <section anchor="with-immutable"
+               title="&quot;with-immutable&quot; Parameter">
+        <t>The YANG model defined in this document (see <xref target="YANG"/>)
+        augments the &lt;get-config&gt;, &lt;get&gt; operation defined in RFC
+        6241, and the &lt;get-data&gt; operation defined in RFC 8526 with a
+        new parameter named "with-immutable". When this parameter is present,
+        it requests that the server includes "immutable" metadata annotations
+        in its response.</t>
+
+        <t>This parameter may be used for read-only configuration datastores,
+        e.g., &lt;system&gt; (if exists), &lt;intended&gt; and
+        &lt;operational&gt;, but the "immutable" metadata annotation returned
+        indicates the immutability towards read-write configuration
+        datastores, e.g., &lt;startup&gt;, &lt;candidate&gt; and
+        &lt;running&gt;. If the "immutable" metadata annotation for returned
+        child nodes are omitted, it has the same immutability as its parent
+        node. The immutability of top hierarchy of returned nodes is false by
+        default.</t>
+
+        <t>Note that "immutable" metadata annotation is not included in a
+        response unless a client explicitly requests them with a "with-
+        immutable" parameter.</t>
+      </section>
+    </section>
+
+    <section title="Interaction between Immutable Flag and NACM">
+      <t>If a data node or particular data node instance is considered as
+      immutable, the servers always reject any operation that attempts to
+      update them. Servers Rejecting an operation due to immutability SHALL be
+      done independent of any access control settings.</t>
+    </section>
+
+    <section anchor="YANG" title="YANG Module">
+      <figure>
+        <artwork> &lt;CODE BEGINS&gt; file="ietf-immutable@2023-05-25.yang"
+//RFC Ed.: replace XXXX with RFC number and remove this note
+  module ietf-immutable {
+    yang-version 1.1;
+    namespace "urn:ietf:params:xml:ns:yang:ietf-immutable";
+    prefix im;
+
+    import ietf-yang-metadata {
+      prefix md;
+    }
+    import ietf-netconf {
+      prefix nc;
+      reference
+        "RFC 6241: Network Configuration Protocol (NETCONF)";
+    }
+    import ietf-netconf-nmda {
+      prefix ncds;
+      reference
+        "RFC 8526: NETCONF Extensions to Support the Network
+         Management Datastore Architecture";
+    }     
+    organization
+      "IETF Network Modeling (NETMOD) Working Group";
+           
+    contact
+      "WG Web: &lt;https://datatracker.ietf.org/wg/netmod/&gt;
+           
+       WG List: &lt;mailto:netmod@ietf.org&gt;
+          
+       Author: Qiufang Ma
+               &lt;mailto:maqiufang1@huawei.com&gt;
+
+       Author: Qin Wu
+               &lt;mailto:bill.wu@huawei.com&gt;
+
+       Author: Balazs Lengyel
+               &lt;mailto:balazs.lengyel@ericsson.com&gt;
+
+       Author: Hongwei Li
+               &lt;mailto:flycoolman@gmail.com&gt;";
+         
+    description
+      "This module defines a YANG extension and a metadata annotation
+       both called 'immutable', to allow the server to formally 
+       document existing behavior on the mutability of some 
+       configuration nodes. Clients may use 'immutable' extension
+       statements in the YANG, and annotations provided by the server
+       to know beforehand when certain otherwise valid configuration
+       requests will cause the server to return an error.
+       
+       Copyright (c) 2023 IETF Trust and the persons identified
+       as authors of the code. All rights reserved.
+
+       Redistribution and use in source and binary forms, with
+       or without modification, is permitted pursuant to, and
+       subject to the license terms contained in, the Revised
+       BSD License set forth in Section 4.c of the IETF Trust's
+       Legal Provisions Relating to IETF Documents
+       (https://trustee.ietf.org/license-info).
+
+       This version of this YANG module is part of RFC HHHH
+       (https://www.rfc-editor.org/info/rfcHHHH); see the RFC
+       itself for full legal notices.
+
+       The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL',
+       'SHALL NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED',
+       'NOT RECOMMENDED', 'MAY', and 'OPTIONAL' in this document
+       are to be interpreted as described in BCP 14 (RFC 2119)
+       (RFC 8174) when, and only when, they appear in all
+       capitals, as shown here.";
+         
+    revision 2023-05-25 {
+      description
+        "Initial revision.";
+      // RFC Ed.: replace XXXX and remove this comment
+      reference
+        "RFC XXXX: YANG Extension and Metadata Annotation for 
+         Immutable Flag";
+    }  
+      
+    extension immutable {
+      argument value;
+      description
+        "If servers always reject client modification attempts to 
+         some data node that can only be created, modified and 
+         deleted by the device itself, an 'immutable' YANG extension
+         can be used to formally indicate to the client.  
+
+         The statement MUST only be a substatement to a 'config true'
+         leaf, leaf-list, container, list, anydata or anyxml 
+         statement. Zero or one immutable statement per parent 
+         statement is allowed. 
+ 
+         No substatements are allowed.
+  
+         The argument of the 'immutable' statement defines the value,
+         indicating whether the node is immutable or not.         
+                  
+         Adding immutable of an existing immutable statement 
+         is non-backwards compatible changes. 
+         Other changes to immutable are backwards compatible.";
+    }    
+
+    md:annotation immutable {
+      type boolean;
+      description
+        "If servers always reject clients modification to some 
+         particular instance that can only be created, modified and 
+         deleted by the device itself, an 'immutable' metadata 
+         annotation can be used to formally indicate to the clients. 
+         The 'immutable' annotation indicates the immutability of an 
+         instantiated data node. 
+         
+         The 'immutable' metadata annotation takes as a value 'true'
+         or 'false'. If the 'immutable' metadata annotation for data 
+         node instances is not specified, the default value is false. 
+         Explicitly annotating instances as immutable=true has the 
+         same effect as not specifying this value.";
+    }
+    
+    grouping with-immutable-grouping {
+      description
+        "define the with-immutable grouping.";
+      leaf with-immutable {
+        type empty;
+        description
+          "If this parameter is present, the server will return the 
+           'immutable' annotation for configuration that it 
+           internally thinks it immutable. When present, this 
+           parameter allows the server to formally document existing 
+           behavior on the mutability of some configuration nodes.";
+      }
+    }
+    augment "/ncds:get-data/ncds:input" {
+      description
+        "Allows the server to include 'immutable' metadata 
+         annotations in its response to get-data operation.";      
+      uses with-immutable-grouping;
+    }
+    augment "/nc:get-config/nc:input" {
+      description
+        "Allows the server to include 'immutable' metadata 
+         annotations in its response to get-config operation.";
+      uses with-immutable-grouping;
+    }
+    augment "/nc:get/nc:input" {
+      description
+        "Allows the server to include 'immutable' metadata 
+         annotations in its response to get operation.";      
+      uses with-immutable-grouping;
+    }
+  }
+
+ &lt;CODE ENDS&gt;</artwork>
+      </figure>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <section title="The &quot;IETF XML&quot; Registry">
+        <t>This document registers one XML namespace URN in the 'IETF XML
+        registry', following the format defined in <xref
+        target="RFC3688"/>.</t>
+
+        <figure>
+          <artwork>URI: urn:ietf:params:xml:ns:yang:ietf-immutable 
+Registrant Contact: The IESG. 
+XML: N/A, the requested URIs are XML namespaces.</artwork>
+        </figure>
+      </section>
+
+      <section title="The &quot;YANG Module Names&quot; Registry">
+        <t>This document registers one module name in the 'YANG Module Names'
+        registry, defined in <xref target="RFC6020"/>.</t>
+
+        <figure>
+          <artwork>name: ietf-immutable 
+prefix: im 
+namespace: urn:ietf:params:xml:ns:yang:ietf-immutable 
+RFC: XXXX 
+// RFC Ed.: replace XXXX and remove this comment</artwork>
+        </figure>
+      </section>
+    </section>
+
+    <section anchor="security" title="Security Considerations">
+      <t>The YANG module specified in this document defines a YANG extension
+      and a metadata Annotation. These can be used to further restrict write
+      access but cannot be used to extend access rights.</t>
+
+      <t>This document does not define any protocol-accessible data nodes.</t>
+
+      <t>Since immutable information is tied to applied configuration values,
+      it is only accessible to clients that have the permissions to read the
+      applied configuration values.</t>
+
+      <t>The security considerations for the Defining and Using Metadata with
+      YANG (see Section 9 of [RFC7952]) apply to the metadata annotation
+      defined in this document.</t>
+    </section>
+
+    <section anchor="Acknowledgements" numbered="no" title="Acknowledgements">
+      <t>Thanks to Kent Watsen, Andy Bierman, Robert Wilton, Jan Lindblad,
+      Reshad Rahman, Anthony Somerset, Lou Berger, Joe Clarke, Scott Mansfield
+      for reviewing, and providing important input to, this document.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119.xml"?>
+
+      <?rfc include="reference.RFC.3688.xml"?>
+
+      <?rfc include="reference.RFC.6020.xml"?>
+
+      <?rfc include="reference.RFC.6241.xml"?>
+
+      <?rfc include="reference.RFC.7950.xml"?>
+
+      <?rfc include="reference.RFC.7952.xml"?>
+
+      <?rfc include="reference.RFC.8341.xml"?>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include="reference.RFC.8174.xml"?>
+
+      <xi:include href="https://datatracker.ietf.org/doc/bibxml3/reference.I-D.ietf-netmod-system-config.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+      <reference anchor="TS32.156">
+        <front>
+          <title>Telecommunication management; Fixed Mobile Convergence (FMC)
+          Model repertoire,
+          &lt;https://www.3gpp.org/ftp/Specs/archive/32_series/32.156/32156-h10.zip&gt;</title>
+
+          <author>
+            <organization>3GPP</organization>
+          </author>
+
+          <date month="" year=""/>
+        </front>
+      </reference>
+
+      <reference anchor="TS28.623">
+        <front>
+          <title>Telecommunication management; Generic Network Resource Model
+          (NRM) Integration Reference Point (IRP); Solution Set (SS)
+          definitions,
+          &lt;https://www.3gpp.org/ftp/Specs/archive/28_series/28.623/28623-i02.zip&gt;</title>
+
+          <author>
+            <organization>3GPP</organization>
+          </author>
+
+          <date month="" year=""/>
+        </front>
+      </reference>
+
+      <reference anchor="TR-531">
+        <front>
+          <title>UML to YANG Mapping Guidelines,
+          &lt;https://wiki.opennetworking.org/download/attachments/376340494/Draft_TR-531_UML-YANG_Mapping_Gdls_v1.1.03.docx?version=5&amp;modificationDate=1675432243513&amp;api=v2&gt;</title>
+
+          <author>
+            <organization>ONF</organization>
+          </author>
+
+          <date month="2" year="2023"/>
+        </front>
+      </reference>
+    </references>
+
+    <section anchor="detailed_use_cases" title="Detailed Use Cases">
+      <section title="UC1 - Modeling of server capabilities">
+        <t>System capabilities might be represented as system-defined data
+        nodes in the model. Configurable data nodes might need constraints
+        specified as "when", "must" or "path" statements to ensure that
+        configuration is set according to the system's capabilities. E.g.,
+        <list style="symbols">
+            <t>A timer can support the values 1,5,8 seconds. This is defined
+            in the leaf-list 'supported-timer-values'.</t>
+
+            <t>When the configurable 'interface-timer' leaf is set, it should
+            be ensured that one of the supported values is used. The natural
+            solution would be to make the 'interface-timer' a leaf-ref
+            pointing at the 'supported-timer-values'.</t>
+          </list>However, this is not possible as 'supported-timer-values'
+        must be read-only thus config=false while 'interface-timer' must be
+        writable thus config=true. According to the rules of YANG it is not
+        allowed to put a constraint between config true and false data
+        nodes.</t>
+
+        <t>The solution is that the supported-timer-values data node in the
+        YANG Model shall be defined as "config true" and shall also be marked
+        with the "immutable" extension making it unchangable. After this the
+        'interface-timer' shall be defined as a leaf-ref pointing at the
+        'supported-timer-values'.</t>
+      </section>
+
+      <section title="UC2 - HW based auto-configuration - Interface Example">
+        <t>This section shows how to use immutable YANG extension to mark some
+        data node as immutable.</t>
+
+        <t>When an interface is physically present, the system will create an
+        interface entry automatically with valid name and type values in
+        &lt;system&gt; (if exists, see <xref
+        target="I-D.ietf-netmod-system-config"/>). The system-generated data
+        is dependent on and must represent the HW present, and as a
+        consequence must not be changed by the client. The data is modelled as
+        "config true" and should be marked as immutable.</t>
+
+        <t>Seemingly an alternative would be to model the list and these
+        leaves as "config false", but that does not work because: <list
+            style="symbols">
+            <t>The list cannot be marked as "config false", because it needs
+            to contain configurable child nodes, e.g., ip-address or
+            enabled;</t>
+
+            <t>The key leaf (name) cannot be marked as "config false" as the
+            list itself is config true;</t>
+
+            <t>The type cannot be marked "config false", because we MAY need
+            to reference the type to make different configuration nodes
+            conditionally available.</t>
+          </list>The immutability of the data is the same for all interface
+        instances, thus following fragment of a fictional interface module
+        including an "immutable" YANG extension can be used:<figure>
+            <artwork>     container interfaces {
+       list interface {
+         key "name";
+         leaf name {
+           type string;
+         }
+         leaf type {
+           im:immutable;
+           type identityref {
+             base ianaift:iana-interface-type;
+           }
+           mandatory true;
+         }
+         leaf mtu {
+           type uint16;
+         }
+         leaf-list ip-address {
+           type inet:ip-address;
+         } 
+       }
+     }</artwork>
+          </figure></t>
+
+        <t>Note that the "name" leaf is defined as a list key which can never
+        been modified for a particular list entry, there is no need to mark
+        "name" as immutable.</t>
+
+        <section anchor="error-update"
+                 title="Error Response to Client Updating the Value of an Interface Type">
+          <t>This section shows an example of an error response due to the
+          client modifying an immutable configuration.</t>
+
+          <t>Assume the system creates an interface entry named "eth0" given
+          that an inerface is inserted into the device. If a client tries to
+          change the type of an interface to a value that doesn't match the
+          real type of the interface used by the system, the request will be
+          rejected by the server: <figure>
+              <artwork>&lt;rpc message-id="101"
+     xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" 
+     xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0"&gt;  
+  &lt;edit-config&gt; 
+    &lt;target&gt; 
+      &lt;running/&gt; 
+    &lt;/target&gt;  
+    &lt;config&gt; 
+      &lt;interface xc:operation="merge"
+            xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type"&gt; 
+        &lt;name&gt;eth0&lt;/name&gt;  
+        &lt;type&gt;ianaift:tunnel&lt;/type&gt; 
+      &lt;/interface&gt; 
+    &lt;/config&gt; 
+  &lt;/edit-config&gt; 
+&lt;/rpc&gt;
+
+&lt;rpc-reply message-id="101"
+           xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"
+           xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0"&gt;  
+  &lt;rpc-error&gt; 
+    &lt;error-type&gt;application&lt;/error-type&gt;  
+    &lt;error-tag&gt;invalid-value&lt;/error-tag&gt;  
+    &lt;error-severity&gt;error&lt;/error-severity&gt;  
+    &lt;error-path xmlns:t="http://example.com/schema/1.2/config"&gt;
+      /interfaces/interface[name="eth0"]/type
+    &lt;/error-path&gt;  
+    &lt;error-message xml:lang="en"&gt;
+      Invalid type for interface eth0
+    &lt;/error-message&gt; 
+  &lt;/rpc-error&gt; 
+&lt;/rpc-reply&gt;</artwork>
+            </figure></t>
+        </section>
+      </section>
+
+      <section title="UC3 - Predefined Access control Rules">
+        <t>Setting up detailed rules for access control is a complex task.
+        (see <xref target="RFC8341"/>) A vendor may provide an initial,
+        predefined set of groups and related access control rules so that the
+        customer can use access control out-of-the-box. The customer may
+        continue using these predefined rules or may add his own groups and
+        rules. The predefined groups shall not be removed or altered
+        guaranteeing that access control remains usable and basic functions
+        e.g., a system-security-administrator are always available.</t>
+
+        <t>The system needs to protect the predefined groups and rules,
+        however, the list "groups" or the list "rule-list" cannot be marked as
+        config=false or with the "immutable" extension in the YANG model
+        because that would prevent the customer adding new entries. Still it
+        would be good to notify the client in a machine readable way that the
+        predefined entries cannot be modified. When the client retrieves
+        access control data the immutable="true" metadata annotation should be
+        used to indicate to the client that the predefined groups and rules
+        cannot be modified.</t>
+      </section>
+
+      <section title="UC4 - Declaring System defined configuration unchangeable">
+        <t>As stated in <xref target="I-D.ietf-netmod-system-config"/> the
+        device itself might supply some configuration. As defined in that
+        document in section "5.4. Modifying (overriding) System Configuration"
+        the server may allow some parts of system configuration to be modified
+        while other parts of the system configuration are non-modifiable. The
+        immutable extension or metadata annotation can be used to define which
+        parts are non-modifiable and to inform the client about this fact.</t>
+      </section>
+
+      <section title="UC6 - Modeling existing data handling behavior in other standard organizations">
+        <t>A number of standard organizations and industry groups (ITU-T,
+        3GPP, ORAN) already use concepts similar to immutability. These
+        modeling concepts sometimes go back to more than 10 years and cannot
+        be and will not be changed irrespective of the YANG RFCs. Some of
+        these organizations are introducing YANG modelling. Without a formal
+        YANG statement to define data nodes immutable the property is only
+        defined in plain English text in the description statement. The
+        immutable flag can be used to define these existing model properties
+        in a machine-readable way.</t>
+      </section>
+    </section>
+
+    <section anchor="Existing_implementations"
+             title="Existing implementations">
+      <t>There are already a number of full or partial implementations of
+      immutability. <list>
+          <t>3GPP TS 32.156 <xref target="TS32.156"/> and 28.623 <xref
+          target="TS28.623"/>: Requirements and a partial solution</t>
+
+          <t>ITU-T using ONF TR-531<xref target="TR-531"/> concept on
+          information model level but no YANG representation.</t>
+
+          <t>Ericsson: requirements and solution</t>
+
+          <t>YumaPro: requirements and solution</t>
+
+          <t>Nokia: partial requirements and solution</t>
+
+          <t>Huawei: partial requirements and solution</t>
+
+          <t>Cisco using the concept at least in some YANG modules</t>
+
+          <t>Junos OS provides a hidden and immutable configuration group
+          called junos-defaults</t>
+        </list></t>
+    </section>
+
+    <section title="Changes between revisions">
+      <t>Note to RFC Editor (To be removed by RFC Editor)</t>
+
+      <t>v06 - v07<list style="symbols">
+          <t>Use a Boolean type for the immutable value in YANG extension and
+          metadata annotation</t>
+
+          <t>Define a "with-immutable" parameter and state that immutable
+          metadata annotation is not included in a response unless a client
+          explicitly requests them with a "with-immutable" parameter</t>
+
+          <t>reword the abstract and related introduction section to highlight
+          immutable flag is descriptive</t>
+
+          <t>Add a new section to define immutability of interior nodes, and
+          merge with "Inheritance of Immutable configuration" section</t>
+
+          <t>Add a new section to define what the immutable flag means for
+          each YANG data node</t>
+
+          <t>Define the "immutable flag" term.</t>
+
+          <t>Add an item in the open issues tracking: Should the "immutable"
+          metadata annotation also be returned for nodes described as
+          immutable in the YANG schema so that there is a single source of
+          truth?</t>
+        </list></t>
+
+      <t>v05 - v06<list style="symbols">
+          <t>Remove immutable BGP AS number case</t>
+
+          <t>Fix nits</t>
+        </list></t>
+
+      <t>v04 - v05<list style="symbols">
+          <t>Emphasized that the proposal tries to formally document existing
+          allowed behavior</t>
+
+          <t>Reword the abstract and introduction sections;</t>
+
+          <t>Restructure the document;</t>
+
+          <t>Simplified the interface example in Appendix;</t>
+
+          <t>Add immutable BGP AS number and peer-type configuration
+          example.</t>
+
+          <t>Added temporary section in Appendix B about list of existing
+          non-standard solutions</t>
+
+          <t>Clarified inheritance of immutability</t>
+
+          <t>Clarified that this draft is not dependent on the existence of
+          the &lt;system&gt; datastore.</t>
+        </list></t>
+
+      <t>v03 - v04<list style="symbols">
+          <t>Clarify how immutable flag interacts with NACM mechanism.</t>
+        </list></t>
+
+      <t>v02 - v03<list style="symbols">
+          <t>rephrase and avoid using "server MUST reject" statement, and try
+          to clarify that this documents aims to provide visibility into
+          existing immutable behavior;</t>
+
+          <t>Add a new section to discuss the inheritance of immutability;</t>
+
+          <t>Clarify that deletion to an immutable node in &lt;running&gt;
+          which is instantiated in &lt;system&gt; and copied into
+          &lt;running&gt; should always be allowed;</t>
+
+          <t>Clarify that write access restriction due to general YANG rules
+          has no need to be marked as immutable.</t>
+
+          <t>Add an new section named "Acknowledgements";</t>
+
+          <t>editoral changes.</t>
+        </list></t>
+
+      <t>v01 - v02<list style="symbols">
+          <t>clarify the relation between the creation/deletion of the
+          immutable data node with its parent data node;</t>
+
+          <t>Add a "TODO" comment about the inheritance of the immutable
+          property;</t>
+
+          <t>Define that the server should reject write attempt to the
+          immutable data node at an &lt;edit-config&gt; operation time, rather
+          than waiting until a &lt;commit&gt; or &lt;validate&gt; operation
+          takes place;</t>
+        </list></t>
+
+      <t>v00 - v01 <list style="symbols">
+          <t>Added immutable extension</t>
+
+          <t>Added new use-cases for immutable extension and annotation</t>
+
+          <t>Added requirement that an update that means no effective change
+          should always be allowed</t>
+
+          <t>Added clarification that immutable is only applied to read-write
+          datastore</t>
+
+          <t>Narrowed the applied scope of metadata annotation to
+          list/leaf-list instances</t>
+        </list></t>
+    </section>
+
+    <section title="Open Issues tracking">
+      <t><list style="symbols">
+          <t>Should the "immutable" metadata annotation also be returned for
+          nodes described as immutable in the YANG schema so that there is a
+          single source of truth?</t>
+        </list></t>
+    </section>
+  </back>
+</rfc>
