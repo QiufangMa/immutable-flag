@@ -169,7 +169,7 @@
           <t>Predefined Access control Rules</t>
 
           <t>Declaring immutable system configuration from an LNE's
-          perspective </t>
+          perspective</t>
         </list> <xref target="detailed_use_cases"/> describes the use cases in
       detail.</t>
 
@@ -252,7 +252,7 @@
       &lt;system&gt;, immutable configuration is present in &lt;system&gt;. It
       may be updated or deleted depending on factors like software upgrade or
       hardware resources/license change. Immutable configuration does not
-      affect the contents of &lt;running&gt; by default. </t>
+      affect the contents of &lt;running&gt; by default.</t>
 
       <t>A client may create/delete immutable nodes with same values as found
       in &lt;system&gt; (if exists) in read-write configuration datastore
@@ -270,7 +270,7 @@
       they internally think it immutable. The error reporting is performed
       immediately at an &lt;edit-config&gt; operation time, regardless what
       the target configuration datastore is. For an example of an
-      "invalid-value" error response, see <xref target="error-update"/>. </t>
+      "invalid-value" error response, see <xref target="error-update"/>.</t>
 
       <t>Servers adding the immutable property which does not have any
       additional semantic meaning is discouraged. For example, a key leaf that
@@ -439,6 +439,10 @@
     </section>
 
     <section title="Interaction between Immutable Flag and NACM">
+      <t>If the Network Configuration Access Control Model (NACM) <xref
+      target="RFC8341"/>is implemented on a server, NACM enforcement is
+      independent on the server's checking on the data immutability.</t>
+
       <t>The server rejects an operation request due to immutability when it
       tries to perform the operation on the request data. It happens after any
       access control processing. For example, if an operation requests to
