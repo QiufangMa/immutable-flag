@@ -248,7 +248,7 @@
 
     <section title="Solution Overview">
       <t>Immutable configuration can only be created by the system regardless
-      of the implementation of the &lt;system&gt; datastore <xref
+      of the implementation of &lt;system&gt; <xref
       target="I-D.ietf-netmod-system-config"/>. Immutable configuration is
       present in &lt;system&gt; (if implements). It may be updated or deleted
       depending on factors like software upgrade or hardware resources/license
@@ -394,8 +394,8 @@
       order for being referenced or configurable prior to present in
       &lt;operational&gt;. However, the device may allow some
       system-initialized node to be overridden, while others may not. System
-      configuration exists regardless of whether the &lt;system&gt; datastore
-      is implemented.</t>
+      configuration exists regardless of whether &lt;system&gt; is
+      implemented.</t>
 
       <t>This document defines a way to allow a server annotate instances of
       non-modifiable system configuration with metadata when system

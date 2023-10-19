@@ -252,13 +252,13 @@ Internet-Draft               Immutable Flag                 October 2023
 2.  Solution Overview
 
    Immutable configuration can only be created by the system regardless
-   of the implementation of the <system> datastore
-   [I-D.ietf-netmod-system-config].  Immutable configuration is present
-   in <system> (if implements).  It may be updated or deleted depending
-   on factors like software upgrade or hardware resources/license
-   change.  Immutable configuration does not appear in <running> unless
-   it is copied explicitly or automatically (e.g., by "resolve-system"
-   parameter) [I-D.ietf-netmod-system-config].
+   of the implementation of <system> [I-D.ietf-netmod-system-config].
+   Immutable configuration is present in <system> (if implements).  It
+   may be updated or deleted depending on factors like software upgrade
+   or hardware resources/license change.  Immutable configuration does
+   not appear in <running> unless it is copied explicitly or
+   automatically (e.g., by "resolve-system" parameter)
+   [I-D.ietf-netmod-system-config].
 
    A client may create/delete immutable nodes with same values as found
    in <system> (if exists) in read-write configuration datastore (e.g.,
@@ -424,7 +424,7 @@ Internet-Draft               Immutable Flag                 October 2023
    in order for being referenced or configurable prior to present in
    <operational>.  However, the device may allow some system-initialized
    node to be overridden, while others may not.  System configuration
-   exists regardless of whether the <system> datastore is implemented.
+   exists regardless of whether <system> is implemented.
 
    This document defines a way to allow a server annotate instances of
    non-modifiable system configuration with metadata when system
