@@ -5,11 +5,11 @@
 NETMOD                                                             Q. Ma
 Internet-Draft                                                     Q. Wu
 Intended status: Standards Track                                  Huawei
-Expires: 19 April 2024                                        B. Lengyel
+Expires: 21 April 2024                                        B. Lengyel
                                                                 Ericsson
                                                                    H. Li
                                                                      HPE
-                                                         17 October 2023
+                                                         19 October 2023
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2024.
+   This Internet-Draft will expire on 21 April 2024.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 1]
+Ma, et al.                Expires 21 April 2024                 [Page 1]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 2]
+Ma, et al.                Expires 21 April 2024                 [Page 2]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -119,10 +119,10 @@ Internet-Draft               Immutable Flag                 October 2023
    This document defines a way to formally document as a YANG metadata
    annotation an existing model handling behavior that has been used by
    multiple standard organizations and vendors.  It is the aim to create
-   one single standard solution for documenting modification
-   restrictions on data declared as configuration, instead of the
-   multiple existing vendor and organization specific solutions.  See
-   Appendix B for existing implementations.
+   one single standard solution for documenting non-modifiable system
+   data declared as configuration, instead of the multiple existing
+   vendor and organization specific solutions.  See Appendix B for
+   existing implementations.
 
    YANG [RFC7950] is a data modeling language used to model both state
    and configuration data, based on the "config" statement.  However,
@@ -140,12 +140,11 @@ Internet-Draft               Immutable Flag                 October 2023
       and needed by the system, while additional list entries can be
       created, modified or deleted;
 
-   Client attempts to override an immutable system configuration node
-   are always rejected by the server [I-D.ietf-netmod-system-config].
-   If the server always rejects the modification because it internally
-   thinks it immutable, it should document this towards the clients in a
-   machine-readable way rather than writing as plain text in the
-   description statement.
+   If the server always rejects the client attempts to override
+   immutable system configuration [I-D.ietf-netmod-system-config]
+   because it internally thinks it immutable, it should document this
+   towards the clients in a machine-readable way rather than writing as
+   plain text in the description statement.
 
    This document defines a way to formally document existing behavior,
    implemented by servers in production, on the immutability of some
@@ -162,15 +161,14 @@ Internet-Draft               Immutable Flag                 October 2023
 
    UC1  Modeling of server capabilities
 
+   UC2  HW based auto-configuration
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 3]
+Ma, et al.                Expires 21 April 2024                 [Page 3]
 
 Internet-Draft               Immutable Flag                 October 2023
 
-
-   UC2  HW based auto-configuration
 
    UC3  Predefined administrator roles
 
@@ -219,14 +217,15 @@ Internet-Draft               Immutable Flag                 October 2023
 
    The following terms are defined in this document:
 
+   immutable flag:  A read-only state value the server provides to
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 4]
+
+Ma, et al.                Expires 21 April 2024                 [Page 4]
 
 Internet-Draft               Immutable Flag                 October 2023
 
 
-   immutable flag:  A read-only state value the server provides to
       describe system data it considers immutable.  The immutability of
       data nodes is conveyed via a YANG metadata annotation called
       "immutable".
@@ -237,14 +236,14 @@ Internet-Draft               Immutable Flag                 October 2023
    This document focuses on the configuration which can only be created,
    updated and deleted by the server.
 
-   The immutable annotation information is also visible even in read-
-   only datastores like <system> (if exists), <intended> and
-   <operational> when a "with-immutable" parameter is carried (see
-   Section 3.2), however this only serves as descriptive information
-   about the instance node itself, but has no effect on the handling of
-   the read-only datastore.
+   The immutable annotation information is also visible in read-only
+   datastores like <system> (if exists), <intended> and <operational>
+   when a "with-immutable" parameter is carried (see Section 3.2),
+   however this only serves as descriptive information about the
+   instance node itself, but has no effect on the handling of the read-
+   only datastore.
 
-   Configuration node must have the same immutability in different
+   Configuration data must have the same immutability in different
    writable datastores.  The immutability of data nodes is protocol and
    user independent.  The immutability and configured value of an
    existing node must only change by software upgrade or hardware
@@ -253,7 +252,7 @@ Internet-Draft               Immutable Flag                 October 2023
 2.  Solution Overview
 
    Immutable configuration can only be created by the system regardless
-   of the implementation of the system configuration datastore
+   of the implementation of the <system> datastore
    [I-D.ietf-netmod-system-config].  Immutable configuration is present
    in <system> (if implements).  It may be updated or deleted depending
    on factors like software upgrade or hardware resources/license
@@ -277,7 +276,8 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 5]
+
+Ma, et al.                Expires 21 April 2024                 [Page 5]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -333,7 +333,7 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 6]
+Ma, et al.                Expires 21 April 2024                 [Page 6]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -389,7 +389,7 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 7]
+Ma, et al.                Expires 21 April 2024                 [Page 7]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -422,19 +422,18 @@ Internet-Draft               Immutable Flag                 October 2023
    The system datastore is defined to hold system configuration provided
    by the device itself and make system configuration visible to clients
    in order for being referenced or configurable prior to present in
-   <operational>.  However, The device may allow some system-initialized
+   <operational>.  However, the device may allow some system-initialized
    node to be overridden, while others may not.  System configuration
-   exists regardless of whether the system datastore is implemented.
+   exists regardless of whether the <system> datastore is implemented.
 
    This document defines a way to allow a server annotate instances of
    non-modifiable system configuration with metadata when system
-   configuration is retrieved, which is independent of the existance of
-   <system>.  A client may try to modify the system configuration, e.g.,
-   by configuring a node with different value in <running> that matches
-   the same node in <system>, immutable flag provides visibility into
-   the immutability of system configuration and allow the client to know
-   beforehand why certain valid requests would cause the server to
-   return an error.
+   configuration is retrieved.  A client aware of the "immutable"
+   annotation can explicitly ask the server to return it via the "with-
+   immutable" parameter in the request, thus is able to avoid making
+   unnecessary modification attempts to immutable configuration.  Legacy
+   clients unaware of the "immutable" annotation don't see any changes
+   and encounter an error as always.
 
 
 
@@ -445,7 +444,8 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 8]
+
+Ma, et al.                Expires 21 April 2024                 [Page 8]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -501,7 +501,7 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                 [Page 9]
+Ma, et al.                Expires 21 April 2024                 [Page 9]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -557,7 +557,7 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 10]
+Ma, et al.                Expires 21 April 2024                [Page 10]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -613,7 +613,7 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 11]
+Ma, et al.                Expires 21 April 2024                [Page 11]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -669,7 +669,7 @@ Normative References
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 12]
+Ma, et al.                Expires 21 April 2024                [Page 12]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -725,7 +725,7 @@ Informative References
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 13]
+Ma, et al.                Expires 21 April 2024                [Page 13]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -781,7 +781,7 @@ A.1.  UC1 - Modeling of server capabilities
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 14]
+Ma, et al.                Expires 21 April 2024                [Page 14]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -822,22 +822,22 @@ A.2.  UC2 - HW based auto-configuration - Interface Example
 
 A.3.  UC3 - Predefined Administrator Roles
 
-   Restricting or authorizing access to a preconfigured subset of all
-   available NETCONF or RESTCONF protocol operations and content for
-   users could be important.  The access control model (ACM) needs to
-   support the concept of administrative users and groups[RFC8341].
+   User and group management is fundamental for setting up access
+   control rules (see section 2.5 of [RFC8341]).
 
-   A device may provide a predefined user account for initial system set
-   up and management of other users/groups, e.g., a system administrator
-   that is always available and has full privileges.  It is possible
-   that the system administrator can create a new user/group and grant
-   it particular privileges, but the predefined administrator account
-   and its granted access cannot be modified or deleted.
+   A device may provide a predefined user account (e.g., a system
+   administrator that is always available and has full privileges) for
+   initial system set up and management of other users/groups.  It is
+   possible that clients can define a new user/group and grant it
+   particular privileges, but the predefined administrator account and
+   its granted access cannot be modified.
 
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 15]
+
+
+Ma, et al.                Expires 21 April 2024                [Page 15]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -887,13 +887,13 @@ Appendix C.  Changes between revisions
 
    v08 - v09
 
-   *  Remove immutable YANG extension definition
+   *  Remove immutable YANG extension definition to simplify the
+      solution
 
 
 
 
-
-Ma, et al.                Expires 19 April 2024                [Page 16]
+Ma, et al.                Expires 21 April 2024                [Page 16]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -949,7 +949,7 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 17]
+Ma, et al.                Expires 21 April 2024                [Page 17]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -1005,7 +1005,7 @@ Internet-Draft               Immutable Flag                 October 2023
 
 
 
-Ma, et al.                Expires 19 April 2024                [Page 18]
+Ma, et al.                Expires 21 April 2024                [Page 18]
 
 Internet-Draft               Immutable Flag                 October 2023
 
@@ -1023,7 +1023,8 @@ Internet-Draft               Immutable Flag                 October 2023
 
 Appendix D.  Open Issues tracking
 
-   *  Error-code definition for edit failure because of immutability
+   *  Is this needed: error-code definition for edit failure because of
+      immutability
 
 Authors' Addresses
 
@@ -1060,5 +1061,4 @@ Authors' Addresses
 
 
 
-
-Ma, et al.                Expires 19 April 2024                [Page 19]
+Ma, et al.                Expires 21 April 2024                [Page 19]

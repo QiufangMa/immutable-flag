@@ -132,9 +132,9 @@
       <t>This document defines a way to formally document as a YANG metadata
       annotation an existing model handling behavior that has been used by
       multiple standard organizations and vendors. It is the aim to create one
-      single standard solution for documenting modification restrictions on
-      data declared as configuration, instead of the multiple existing vendor
-      and organization specific solutions. See <xref
+      single standard solution for documenting non-modifiable system data
+      declared as configuration, instead of the multiple existing vendor and
+      organization specific solutions. See <xref
       target="Existing_implementations"/> for existing implementations.</t>
 
       <t>YANG <xref target="RFC7950"/> is a data modeling language used to
@@ -151,12 +151,12 @@
           <t>ensure the existence of specific list entries that are provided
           and needed by the system, while additional list entries can be
           created, modified or deleted;</t>
-        </list>Client attempts to override an immutable system configuration
-      node are always rejected by the server <xref
-      target="I-D.ietf-netmod-system-config"/>. If the server always rejects
-      the modification because it internally thinks it immutable, it should
-      document this towards the clients in a machine-readable way rather than
-      writing as plain text in the description statement.</t>
+        </list>If the server always rejects the client attempts to override
+      immutable system configuration <xref
+      target="I-D.ietf-netmod-system-config"/> because it internally thinks it
+      immutable, it should document this towards the clients in a
+      machine-readable way rather than writing as plain text in the
+      description statement.</t>
 
       <t>This document defines a way to formally document existing behavior,
       implemented by servers in production, on the immutability of some system
@@ -231,14 +231,14 @@
         <t>This document focuses on the configuration which can only be
         created, updated and deleted by the server.</t>
 
-        <t>The immutable annotation information is also visible even in
-        read-only datastores like &lt;system&gt; (if exists), &lt;intended&gt;
-        and &lt;operational&gt; when a "with-immutable" parameter is carried
-        (see <xref target="with-immutable"/>), however this only serves as
+        <t>The immutable annotation information is also visible in read-only
+        datastores like &lt;system&gt; (if exists), &lt;intended&gt; and
+        &lt;operational&gt; when a "with-immutable" parameter is carried (see
+        <xref target="with-immutable"/>), however this only serves as
         descriptive information about the instance node itself, but has no
         effect on the handling of the read-only datastore.</t>
 
-        <t>Configuration node must have the same immutability in different
+        <t>Configuration data must have the same immutability in different
         writable datastores. The immutability of data nodes is protocol and
         user independent. The immutability and configured value of an existing
         node must only change by software upgrade or hardware resource/license
@@ -248,7 +248,7 @@
 
     <section title="Solution Overview">
       <t>Immutable configuration can only be created by the system regardless
-      of the implementation of the system configuration datastore <xref
+      of the implementation of the &lt;system&gt; datastore <xref
       target="I-D.ietf-netmod-system-config"/>. Immutable configuration is
       present in &lt;system&gt; (if implements). It may be updated or deleted
       depending on factors like software upgrade or hardware resources/license
@@ -392,20 +392,19 @@
       <t>The system datastore is defined to hold system configuration provided
       by the device itself and make system configuration visible to clients in
       order for being referenced or configurable prior to present in
-      &lt;operational&gt;. However, The device may allow some
+      &lt;operational&gt;. However, the device may allow some
       system-initialized node to be overridden, while others may not. System
-      configuration exists regardless of whether the system datastore is
-      implemented.</t>
+      configuration exists regardless of whether the &lt;system&gt; datastore
+      is implemented.</t>
 
       <t>This document defines a way to allow a server annotate instances of
       non-modifiable system configuration with metadata when system
-      configuration is retrieved, which is independent of the existance of
-      &lt;system&gt;. A client may try to modify the system configuration,
-      e.g., by configuring a node with different value in &lt;running&gt; that
-      matches the same node in &lt;system&gt;, immutable flag provides
-      visibility into the immutability of system configuration and allow the
-      client to know beforehand why certain valid requests would cause the
-      server to return an error.</t>
+      configuration is retrieved. A client aware of the "immutable" annotation
+      can explicitly ask the server to return it via the "with-immutable"
+      parameter in the request, thus is able to avoid making unnecessary
+      modification attempts to immutable configuration. Legacy clients unaware
+      of the "immutable" annotation don't see any changes and encounter an
+      error as always.</t>
     </section>
 
     <section title="Interaction between Immutable Flag and NACM">
@@ -704,7 +703,7 @@ RFC: XXXX
         management of network interfaces. When a system-controlled interface
         is physically present, the system creates an interface entry with
         valid name and type values in &lt;system&gt; (if exists, see <xref
-        target="I-D.ietf-netmod-system-config"/>). </t>
+        target="I-D.ietf-netmod-system-config"/>).</t>
 
         <t>The system-generated type value is dependent on and represents the
         HW present, and as a consequence cannot be changed by the client. If a
@@ -730,18 +729,15 @@ RFC: XXXX
       </section>
 
       <section title="UC3 - Predefined Administrator Roles">
-        <t>Restricting or authorizing access to a preconfigured subset of all
-        available NETCONF or RESTCONF protocol operations and content for
-        users could be important. The access control model (ACM) needs to
-        support the concept of administrative users and groups<xref
-        target="RFC8341"/>.</t>
+        <t>User and group management is fundamental for setting up access
+        control rules (see section 2.5 of <xref target="RFC8341"/>).</t>
 
-        <t>A device may provide a predefined user account for initial system
-        set up and management of other users/groups, e.g., a system
-        administrator that is always available and has full privileges. It is
-        possible that the system administrator can create a new user/group and
-        grant it particular privileges, but the predefined administrator
-        account and its granted access cannot be modified or deleted.</t>
+        <t>A device may provide a predefined user account (e.g., a system
+        administrator that is always available and has full privileges) for
+        initial system set up and management of other users/groups. It is
+        possible that clients can define a new user/group and grant it
+        particular privileges, but the predefined administrator account and
+        its granted access cannot be modified.</t>
       </section>
 
       <section title="UC4 - Declaring immutable system configuration from an LNE's perspective ">
@@ -788,7 +784,8 @@ RFC: XXXX
       <t>Note to RFC Editor (To be removed by RFC Editor)</t>
 
       <t>v08 - v09<list style="symbols">
-          <t>Remove immutable YANG extension definition</t>
+          <t>Remove immutable YANG extension definition to simplify the
+          solution</t>
 
           <t>Add a new section to discuss the interaction between immutable
           flag and &lt;system&gt;</t>
@@ -905,7 +902,7 @@ RFC: XXXX
 
     <section title="Open Issues tracking">
       <t><list style="symbols">
-          <t>Error-code definition for edit failure because of
+          <t>Is this needed: error-code definition for edit failure because of
           immutability</t>
         </list></t>
     </section>
