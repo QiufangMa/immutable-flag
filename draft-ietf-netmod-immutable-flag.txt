@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 6241, 8040, 8526 (if approved)                           Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 28 March 2025                                          Ericsson
+Expires: 29 March 2025                                          Ericsson
                                                                    H. Li
                                                                      HPE
-                                                       24 September 2024
+                                                       25 September 2024
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 March 2025.
+   This Internet-Draft will expire on 29 March 2025.
 
 Copyright Notice
 
@@ -138,7 +138,7 @@ Table of Contents
       and needed by the system, while additional list entries can be
       created, modified or deleted.
 
-   If the server always rejects the clients' attempts to override some
+   If the server always rejects a client's attempt to override some
    system-provided data because it internally thinks immutable, it
    should document it towards the clients in a machine-readable way
    rather than writing as plain text in the "description" statement.
@@ -237,8 +237,9 @@ Table of Contents
    This document defines the following term:
 
    immutable flag:  A read-only state value the server provides to
-      describe immutability of the data, which is conveyed via a YANG
-      metadata annotation called "immutable" with a boolean value.
+      describe immutability of the configuration, which is conveyed via
+      a YANG metadata annotation called "immutable" with a boolean
+      value.
 
 3.  Applicability
 
@@ -265,10 +266,10 @@ Table of Contents
    The immutable flag which is defined as the metadata annotation takes
    a boolean value, and it is returned as requested by the client using
    a "with-immutable" parameter (Section 4.2).  If the "immutable"
-   metadata annotation for a node is not specified, the default
-   "immutable" value is the same as the value of its parent node in the
-   data tree (Section 6).  The immutable metadata annotation value for a
-   top-level instance node is "false" if not specified.
+   metadata annotation for a configuration node is not specified, the
+   default "immutable" value is the same as the value of its parent node
+   in the data tree (Section 6).  The immutable metadata annotation
+   value for a top-level instance node is "false" if not specified.
 
    Note that "immutable" metadata annotations are used to annotate data
    node instances.  A list may have multiple instances in the data tree,
