@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 6241, 8040, 8526 (if approved)                           Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 30 March 2025                                          Ericsson
+Expires: 13 September 2025                                      Ericsson
                                                                    H. Li
                                                                      HPE
-                                                       26 September 2024
+                                                           12 March 2025
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -28,6 +28,8 @@ Abstract
 
    The immutable flag is descriptive, documenting an existing behavior,
    not proscriptive, dictating server behaviors.
+
+   This document updates [RFC6241], [RFC8040], and [RFC8526].
 
 Discussion Venues
 
@@ -55,11 +57,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 March 2025.
+   This Internet-Draft will expire on 13 September 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -166,8 +168,6 @@ Table of Contents
       perspective
 
    Appendix A describes the use cases in detail.
-
-   This document updates {{RFC6241}}, {{RFC8040}}, and {{RFC8526}}.
 
 1.1.  Updates to RFC 6241 and RFC 8526
 
@@ -643,14 +643,6 @@ Table of Contents
 
 12.1.  Normative References
 
-   [I-D.ietf-netmod-rfc8407bis]
-              Bierman, A., Boucadair, M., and Q. Wu, "Guidelines for
-              Authors and Reviewers of Documents Containing YANG Data
-              Models", Work in Progress, Internet-Draft, draft-ietf-
-              netmod-rfc8407bis-16, 20 September 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-netmod-
-              rfc8407bis-16>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -699,12 +691,20 @@ Table of Contents
 
 12.2.  Informative References
 
+   [I-D.ietf-netmod-rfc8407bis]
+              Bierman, A., Boucadair, M., and Q. Wu, "Guidelines for
+              Authors and Reviewers of Documents Containing YANG Data
+              Models", Work in Progress, Internet-Draft, draft-ietf-
+              netmod-rfc8407bis-22, 14 January 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-netmod-
+              rfc8407bis-22>.
+
    [I-D.ietf-netmod-system-config]
               Ma, Q., Wu, Q., and C. Feng, "System-defined
               Configuration", Work in Progress, Internet-Draft, draft-
-              ietf-netmod-system-config-08, 18 June 2024,
+              ietf-netmod-system-config-12, 12 February 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-netmod-
-              system-config-08>.
+              system-config-12>.
 
    [RFC4252]  Ylonen, T. and C. Lonvick, Ed., "The Secure Shell (SSH)
               Authentication Protocol", RFC 4252, DOI 10.17487/RFC4252,
