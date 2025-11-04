@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 16 November 2025                                       Ericsson
+Expires: 8 May 2026                                             Ericsson
                                                                    H. Li
                                                                      HPE
-                                                             15 May 2025
+                                                         4 November 2025
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 November 2025.
+   This Internet-Draft will expire on 8 May 2026.
 
 Copyright Notice
 
@@ -724,9 +724,9 @@ Table of Contents
               Bierman, A., Boucadair, M., and Q. Wu, "Guidelines for
               Authors and Reviewers of Documents Containing YANG Data
               Models", Work in Progress, Internet-Draft, draft-ietf-
-              netmod-rfc8407bis-25, 5 May 2025,
+              netmod-rfc8407bis-28, 5 June 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-netmod-
-              rfc8407bis-25>.
+              rfc8407bis-28>.
 
    [RFC4252]  Ylonen, T. and C. Lonvick, Ed., "The Secure Shell (SSH)
               Authentication Protocol", RFC 4252, DOI 10.17487/RFC4252,
@@ -922,7 +922,7 @@ Appendix B.  Example of Server's Immutable Behavior
        <access-right>admin</access-right>
        <user>
          <user-name>Andy</user-name>
-         <password>$0$423423423</password>
+         <password>$5$salt$42x6N3voGLL5rV7qU5qK6L8jF9eD2aB3c</password>
        </user>
        <user imma:immutable="false">
          <user-name>Bob</user-name>
