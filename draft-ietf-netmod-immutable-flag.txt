@@ -111,7 +111,7 @@ Table of Contents
      A.3.  UC3 - Predefined Administrator Roles
      A.4.  UC4 - Declaring immutable system configuration from the
            perspective of a logical network element (LNE)
-   Appendix B.  Example of Server's Immutable Behavior
+   Appendix B.  Examples of Server's Immutable Behavior
      B.1.  The Inheritance of Immutability
      B.2.  Immutability of the list
      B.3.  Immutability of the leaf-list
@@ -854,11 +854,12 @@ A.4.  UC4 - Declaring immutable system configuration from the
    the interface model.  The assigned MTU value is system-created and
    immutable from the context of the LNE.
 
-Appendix B.  Example of Server's Immutable Behavior
+Appendix B.  Examples of Server's Immutable Behavior
 
    This section provides some examples to illustrate the server's
-   behavior with immutable flag.  The following fictional module is used
-   throughout this section:
+   behavior with immutable flag.  These examples are not intended as
+   recommendations for real-world deployments.  The following fictional
+   module is used throughout this section:
 
    module example-user-group {
      yang-version 1.1;
