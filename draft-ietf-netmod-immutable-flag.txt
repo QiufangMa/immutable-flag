@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 8 May 2026                                             Ericsson
+Expires: 14 May 2026                                            Ericsson
                                                                    H. Li
                                                                      HPE
-                                                         4 November 2025
+                                                        10 November 2025
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 May 2026.
+   This Internet-Draft will expire on 14 May 2026.
 
 Copyright Notice
 
@@ -978,8 +978,9 @@ B.2.  Immutability of the list
    "description" and "ex-username-2" user list entry nodes, which is
    explicitly reset to be mutable.  The client may also subsequently
    delete any copied "user-group" entries or the entire "user-groups"
-   container, but this will not prevent the configuration as shown in
-   Figure 2 being present in <intended> (if implemented).
+   container, which will not prevent the deleted data being present in
+   <intended> (if implemented) assuming it is still contained in
+   <system>.
 
    The "user" list inside the "administrator" user-group list entry as a
    whole inherits immutability from the list entry, which is immutable.
@@ -1001,13 +1002,15 @@ B.3.  Immutability of the leaf-list
    immutability from the list entry, which is immutable.  Thus the
    client cannot add, modify, or reorder entries, the client may copy or
    subsequently delete any of the two leaf-list entries in <running>,
-   but there is no way to delete the nodes from <intended>.
+   but there is no way to delete the nodes from <intended> if those
+   entries still appear in <system>.
 
    The leaf-list node instance inside the "power-users" user-group entry
    as a whole inherits immutability from the list entry, which is
    mutable.  Thus the client can add or reorder entries, the client may
    copy or subsequently delete any of the two leaf-list entries in
-   <running>, but there is no way to delete the nodes from <intended>.
+   <running>, but there is no way to delete the nodes from <intended> if
+   those entries still appear in <system>.
 
 Appendix C.  Existing Implementations
 

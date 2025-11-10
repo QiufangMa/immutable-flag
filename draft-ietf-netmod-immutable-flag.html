@@ -1060,7 +1060,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ma, et al.</td>
-<td class="center">Expires 8 May 2026</td>
+<td class="center">Expires 14 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1076,12 +1076,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc8040" class="eref">8040</a>, <a href="https://www.rfc-editor.org/rfc/rfc8526" class="eref">8526</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-04" class="published">4 November 2025</time>
+<time datetime="2025-11-10" class="published">10 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-08">8 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-14">14 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1149,7 +1149,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2309,10 +2309,10 @@ Other descendant nodes inside "power-users" user-group inherit the immutability 
  and the other entry named "power-user" is mutable. The client is able to copy the entire "user-groups"
  container in &lt;running&gt;, add new user-group entries, modify the values of descendant nodes of "power-users" list entry,
  but the values of descendant nodes of "administrator" list entry cannot be overridden with different values expect
- for the "description" and "ex-username-2" user list entry nodes, which is explicitly reset to be mutable. The client
- may also subsequently delete any copied "user-group" entries or the entire
- "user-groups" container, but this will not prevent the
- configuration as shown in <a href="#example" class="auto internal xref">Figure 2</a> being present in &lt;intended&gt; (if implemented).<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
+ for the "description" and "ex-username-2" user list entry nodes, which is explicitly reset to be mutable.
+ The client may also subsequently delete any copied "user-group" entries or the entire
+ "user-groups" container, which will not prevent the deleted data being present in &lt;intended&gt; (if implemented) assuming it
+ is still contained in &lt;system&gt;.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.2-2">The "user" list inside the "administrator" user-group list entry as a whole inherits immutability from the
  list entry, which is immutable. Thus the client cannot add new user entries inside "administrator" user-group.
  As one of the user entry named "ex-username-1" is immutable through inheritance,
@@ -2330,11 +2330,11 @@ Other descendant nodes inside "power-users" user-group inherit the immutability 
         </h3>
 <p id="appendix-B.3-1">In the example in <a href="#example" class="auto internal xref">Figure 2</a>, the user-ordered "tag" leaf-list node inside the "administrator" user-group entry as a whole inherits immutability from the list entry, which is immutable. Thus the client cannot add, modify, or reorder
 entries, the client may copy or subsequently delete any of the two leaf-list entries in &lt;running&gt;,
-but there is no way to delete the nodes from &lt;intended&gt;.<a href="#appendix-B.3-1" class="pilcrow">¶</a></p>
+but there is no way to delete the nodes from &lt;intended&gt; if those entries still appear in &lt;system&gt;.<a href="#appendix-B.3-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.3-2">The leaf-list node instance inside the "power-users" user-group entry as a whole inherits
 immutability from the list entry, which is mutable. Thus the client can add or reorder
 entries, the client may copy or subsequently delete any of the two leaf-list entries in &lt;running&gt;,
-but there is no way to delete the nodes from &lt;intended&gt;.<a href="#appendix-B.3-2" class="pilcrow">¶</a></p>
+but there is no way to delete the nodes from &lt;intended&gt; if those entries still appear in &lt;system&gt;.<a href="#appendix-B.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
