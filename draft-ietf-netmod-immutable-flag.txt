@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 13 July 2026                                           Ericsson
+Expires: 15 July 2026                                           Ericsson
                                                                    H. Li
                                                                      HPE
-                                                          9 January 2026
+                                                         11 January 2026
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 July 2026.
+   This Internet-Draft will expire on 15 July 2026.
 
 Copyright Notice
 
@@ -112,8 +112,8 @@ Table of Contents
      A.4.  UC4 - Declaring immutable system configuration from the
            perspective of a logical network element (LNE)
    Appendix B.  Examples of Server's Immutable Behavior
-     B.1.  NETCONF Example to Retrieve Immutable Flag
-     B.2.  RESTCONF Example to Retrieve Immutable Flag
+     B.1.  NETCONF Example to Retrieve Immutable Configuration
+     B.2.  RESTCONF Example to Retrieve Immutable Configuration
      B.3.  The Inheritance of Immutability
      B.4.  Immutability of the list
      B.5.  Immutability of the leaf-list
@@ -319,9 +319,10 @@ Table of Contents
 4.2.1.  NETCONF Extensions to Support "with-immutability"
 
    This doument updates [RFC8526] to augment the <get-data> operation
-   with an additional parameter named "with-immutability".  If present,
-   this parameter requests that the server includes the "immutable"
-   metadata annotations in its response.
+   with an additional parameter named "with-immutability" when
+   interacting with read-only datastores.  If present, this parameter
+   requests that the server includes the "immutable" metadata
+   annotations in its response.
 
    Figure 1 provides the tree structure [RFC8340] of augmentations to
    NETCONF operations, as defined in the "ietf-immutable-annotation"
@@ -333,20 +334,28 @@ Table of Contents
 
                Figure 1: Augmentations to NETCONF Operations
 
+   Refer to Appendix B.1 for an example of NETCONF operation with "with-
+   immutability" input parameter.
+
 4.2.2.  RESTCONF Extensions to Support "with-immutability"
 
    This document extends Sections 4.8 and 9.1.1 of [RFC8040] to add a
    query parameter named "with-immutability" to the GET operation.  If
    present, this parameter requests that the server includes the
    "immutable" metadata annotations in its response.  This parameter is
-   only allowed with no values carried.  If it has any unexpected value,
-   then a "400 Bad Request" status-line is returned.
+   only allowed with no values carried when interacting with read-only
+   datastores.  If it has any unexpected value, then a "400 Bad Request"
+   status-line is returned.  RESTCONF protocol operations for the
+   datastore resources are defined in [RFC8527].
 
    To enable a RESTCONF client to discover if the "with-immutability"
    query parameter is supported by the server, the following capability
    URI is defined:
 
        urn:ietf:params:restconf:capability:with-immutability:1.0
+
+   Refer to Appendix B.2 for an example of RESTCONF operation with
+   "with-immutability" query parameter.
 
 5.  Use of Immutable Flag for Different Statements
 
@@ -719,6 +728,12 @@ Table of Contents
               DOI 10.17487/RFC8526, March 2019,
               <https://www.rfc-editor.org/rfc/rfc8526>.
 
+   [RFC8527]  Bjorklund, M., Schoenwaelder, J., Shafer, P., Watsen, K.,
+              and R. Wilton, "RESTCONF Extensions to Support the Network
+              Management Datastore Architecture", RFC 8527,
+              DOI 10.17487/RFC8527, March 2019,
+              <https://www.rfc-editor.org/rfc/rfc8527>.
+
 12.2.  Informative References
 
    [I-D.ietf-netmod-rfc8407bis]
@@ -908,11 +923,11 @@ Appendix B.  Examples of Server's Immutable Behavior
      }
    }
 
-B.1.  NETCONF Example to Retrieve Immutable Flag
+B.1.  NETCONF Example to Retrieve Immutable Configuration
 
    Figure 2 illustrates an NETCONF example to retrieve "user-groups"
-   configuration in <system> with immutable flag and the response a
-   server might return.
+   configuration in <system> with "with-immutability" parameter and the
+   response a server might return.
 
 <rpc message-id="101"
      xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
@@ -964,11 +979,11 @@ B.1.  NETCONF Example to Retrieve Immutable Flag
 
    Figure 2: An NETCONF Example to Retrieve Immutable Configuration
 
-B.2.  RESTCONF Example to Retrieve Immutable Flag
+B.2.  RESTCONF Example to Retrieve Immutable Configuration
 
    Figure 3 illustrates an RESTCONF example to retrieve "user-groups"
-   configuration in <system> with immutable flag and the response a
-   server might return.
+   configuration in <system> with "with-immutability" query parameter
+   and the response a server might return.
 
 GET /restconf/ds/ietf-system-datastore:system/example-user-group:user-groups/with-immutability HTTP/1.1
 Host: example.com
