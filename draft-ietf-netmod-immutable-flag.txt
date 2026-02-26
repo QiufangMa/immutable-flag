@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 16 July 2026                                           Ericsson
+Expires: 30 August 2026                                         Ericsson
                                                                    H. Li
                                                                      HPE
-                                                         12 January 2026
+                                                        26 February 2026
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 July 2026.
+   This Internet-Draft will expire on 30 August 2026.
 
 Copyright Notice
 
@@ -117,7 +117,8 @@ Table of Contents
      B.3.  The Inheritance of Immutability
      B.4.  Immutability of the list
      B.5.  Immutability of the leaf-list
-     B.6.  Error Response to Clients Updating Immutable Configuration
+     B.6.  Error Response to Clients Overriding Immutable
+           Configuration
    Appendix C.  Existing Implementations
    Acknowledgments
    Authors' Addresses
@@ -671,9 +672,9 @@ Table of Contents
    [I-D.ietf-netmod-system-config]
               Ma, Q., Wu, Q., and C. Feng, "System-defined
               Configuration", Work in Progress, Internet-Draft, draft-
-              ietf-netmod-system-config-17, 8 January 2026,
+              ietf-netmod-system-config-20, 28 January 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-netmod-
-              system-config-17>.
+              system-config-20>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -923,7 +924,7 @@ Appendix B.  Examples of Server's Immutable Behavior
 
 B.1.  NETCONF Example to Retrieve Immutable Configuration
 
-   Figure 2 illustrates an NETCONF request example to retrieve "user-
+   Figure 2 illustrates a NETCONF request example to retrieve "user-
    groups" configuration in <system> with "with-immutability" parameter
    and the response a server might return.
 
@@ -981,18 +982,18 @@ B.1.  NETCONF Example to Retrieve Immutable Configuration
      </data>
    </rpc-reply>
 
-      Figure 2: An NETCONF Example to Retrieve Immutable Configuration
+      Figure 2: A NETCONF Example to Retrieve Immutable Configuration
 
 B.2.  RESTCONF Example to Retrieve Immutable Configuration
 
-   Figure 3 illustrates an RESTCONF request example to retrieve "user-
+   Figure 3 illustrates a RESTCONF request example to retrieve "user-
    groups" configuration in <system> with "with-immutability" query
    parameter and the response a server might return.
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
    GET /restconf/ds/ietf-system-datastore:system/example-user-group:\
-                                  user-groups/with-immutability HTTP/1.1
+                                  user-groups?with-immutability HTTP/1.1
    Host: example.com
    Accept: application/yang-data+json
 
@@ -1056,7 +1057,7 @@ B.2.  RESTCONF Example to Retrieve Immutable Configuration
      }
    }
 
-     Figure 3: An RESTCONF Example to Retrieve Immutable Configuration
+      Figure 3: A RESTCONF Example to Retrieve Immutable Configuration
 
 B.3.  The Inheritance of Immutability
 
@@ -1123,9 +1124,9 @@ B.5.  Immutability of the leaf-list
    but there is no way to delete the nodes from <intended> if those
    entries appear in <system>.
 
-B.6.  Error Response to Clients Updating Immutable Configuration
+B.6.  Error Response to Clients Overriding Immutable Configuration
 
-   Figure 4 provides examples of an attempt to update immutable
+   Figure 4 provides examples of an attempt to override immutable
    configuration and the error response that the server might return.
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
