@@ -115,7 +115,7 @@ informative:
    modified or deleted.
 
    If the server always rejects a client's attempt to override some
-   system-provided data because it internally thinks immutable, it should document
+   system-provided data because it internally thinks the data is immutable, it should document
    it towards the clients in a machine-readable way rather than writing as
    plain text in the "description" statement.
 
@@ -126,11 +126,6 @@ informative:
    regulate server behaviors. That said, it is expected that a server will return
    an error with an error-tag containing "invalid-value" when immutability
    is attempted to be violated.
-
-   This document does not apply to the server not having any immutable
-   system configuration.  While in some cases immutability may be
-   needed, it also has disadvantages, therefore it SHOULD be avoided
-   wherever possible.
 
    The following is a list of already implemented and potential use
    cases:
@@ -145,7 +140,7 @@ informative:
 ## Updates to RFC 8040
 
   This document updates {{Sections 4.8 and 9.1.1 of !RFC8040}} to add an
-  additional input parameter named "with-immutability", as specified in {{RESTCONF-ext}}.
+  additional query parameter named "with-immutability", as specified in {{RESTCONF-ext}}.
 
 ## Updates to RFC 8526
 
@@ -165,7 +160,7 @@ informative:
   Please apply the following replacements:
 
   * XXXX --> the assigned RFC number for this draft
-  * 2026-01-12 --> the actual date of the publication of this document
+  * 2026-02-26 --> the actual date of the publication of this document
 
 # Conventions and Definitions
 
@@ -204,8 +199,8 @@ informative:
 
 # Applicability
 
-   While immutable flag applies to all configuration nodes, its value "true"
-   can only be used for system configuration.
+   While the immutable flag applies to all configuration nodes, its value true can
+   only be used for system configuration.
 
    The immutable flag is only visible in read-only datastores (i.e., \<system\>
    {{?I-D.ietf-netmod-system-config}}, \<intended\>, and \<operational\>)
@@ -216,8 +211,8 @@ informative:
    datastore, then the server MUST return an \<rpc-error\> element with an \<error-tag\>
    value of "invalid-value".
 
-   An instance has the same immutability if it appears in different datastores,
-   the immutability of configuration data is also protocol and
+   Configuration data has the same immutability if it appears in different datastores.
+   The immutability of configuration data is protocol and
    user independent. The immutability of any configuration data, and the value
    of any immutable configured data node, MUST only change via software
    upgrade, hardware resources change, or license change.
@@ -383,7 +378,7 @@ Refer to {{RESTCONF-example}} for an example of RESTCONF operation with "with-im
    state as needed, thereby affecting their descendants.  There is no limit
    to the number of times the immutability state may change in a data tree.
 
-   If the "immutable" metadata annotation for returned child node is omitted,
+   If the "immutable" metadata annotation for a returned child node is omitted,
    it has the same immutability as its parent node. The immutability of top
    hierarchy of returned nodes is false by default. Servers may suppress the
    annotation if it is inherited from its parent node or uses the default value
@@ -403,7 +398,7 @@ Refer to {{RESTCONF-example}} for an example of RESTCONF operation with "with-im
 
    As specified in {{immutable-def}}, a client MAY create/delete immutable nodes
    with same values as defined by server in read-write configuration datastore (e.g.,
-   \<candidate\>, \<running\>), which merely mean making immutable nodes
+   \<candidate\>, \<running\>), which merely makes immutable nodes
    visible/invisible in the datastore.
 
 
@@ -423,7 +418,7 @@ Refer to {{RESTCONF-example}} for an example of RESTCONF operation with "with-im
    This module imports definitions from {{!RFC7952}}, {{!RFC8342}}, {{!RFC8526}}, and {{!I-D.ietf-netmod-system-config}}.
 
 ~~~~
-<CODE BEGINS> file "ietf-immutable-annotation@2026-01-12.yang"
+<CODE BEGINS> file "ietf-immutable-annotation@2026-02-26.yang"
 {::include ietf-immutable-annotation.yang}
 <CODE ENDS>
 ~~~~
@@ -515,9 +510,9 @@ urn:ietf:params:restconf:capability:with-immutability:1.0
    make the 'interface-timer' a leaf-ref pointing at the 'supported-timer-values'.
 
    However, this is not possible as 'supported-timer-values' must be
-   read-only thus config=false while 'interface-timer' must be writable
-   thus config=true.  According to the rules of YANG it is not allowed
-   to put a constraint between config true and false data nodes.
+   read-only thus "config false" while 'interface-timer' must be writable
+   thus "config true".  According to the rules of YANG it is not allowed
+   to put a constraint between "config true" and "config false" data nodes.
 
    The solution is that the supported-timer-values data node in the YANG
    Model shall be defined as "config true" and shall also be marked with
@@ -546,7 +541,7 @@ urn:ietf:params:restconf:capability:with-immutability:1.0
   configurable child nodes, e.g., IP address or enabled;
 
   * The key leaf (name) cannot be marked as "config false" as the list
-  itself is config true;
+  itself is "config true";
 
   * The type cannot be marked "config false", because we MAY need to
   reference the type to make different configuration nodes
@@ -629,7 +624,7 @@ Other descendant nodes inside "power-users" group inherit the immutability of th
  container "user-groups", which is mutable. One of the list entry named "administrator" is immutable,
  and the other entry named "power-user" is mutable. The client is able to copy the entire "user-groups"
  container in \<running\>, add new "group" entries, modify the values of descendant nodes of "power-users" list entry,
- but the values of descendant nodes of "administrator" list entry cannot be overridden with different values expect
+ but the values of descendant nodes of "administrator" list entry cannot be overridden with different values except
  for the "description" and "ex-username-2" user list entry nodes, which is explicitly reset to be mutable.
  The client may also subsequently delete any copied "group" entries or the entire
  "user-groups" container, which will not prevent the deleted data being present in \<intended\> (if implemented) assuming it

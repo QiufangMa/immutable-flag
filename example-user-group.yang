@@ -1,20 +1,44 @@
 module example-user-group {
   yang-version 1.1;
   namespace "urn:example:user-group";
-  prefix "ex-urp";
+  prefix ex-urp;
 
   import iana-crypt-hash {
     prefix ianach;
   }
+ 
+  organization
+    "Example, Inc.";
+
+  contact
+    "Support at example.com";
+
+  description
+    "An example module for basic user and group management.";
+
+  revision "2026-02-26" {
+    description
+      "Initial version.";
+    reference
+      "RFC XXXX: YANG Metadata Annotation for Immutable Flag";
+  }
 
   container user-groups {
+    description
+      "A container for user and group management";
     list group {
       key "name";
+      description
+        "The list of access user-groups";
       leaf name {
         type string;
+        description
+          "Unique name identifier for the user-group";
       }
       leaf description {
         type string;
+        description
+          "Human-readable description of the group";
       }
       leaf access-level {
         type enumeration {
@@ -23,22 +47,34 @@ module example-user-group {
           enum normal;
           enum guest;
         }
+        description
+          "Permission level assigned to the group";
       }
       list user {
         key "name";
+        description
+          "List of users belonging to the group";
         leaf name {
           type string;
+          description
+            "Unique name identifier for the user";
         }
         leaf password {
           type ianach:crypt-hash;
+          description
+            "Cryptographically hashed user password";
         }
         leaf full-name {
           type string;
+          description
+            "Human-readable full name of the user";
         }
       }
       leaf-list tag {
         type string;
         ordered-by user;
+        description
+          "User-ordered tags for categorizing the user-group";
       }
     }
   }
