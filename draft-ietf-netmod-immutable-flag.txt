@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 30 August 2026                                         Ericsson
+Expires: 13 September 2026                                      Ericsson
                                                                    H. Li
                                                                      HPE
-                                                        26 February 2026
+                                                           12 March 2026
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2026.
+   This Internet-Draft will expire on 13 September 2026.
 
 Copyright Notice
 
@@ -556,7 +556,7 @@ Table of Contents
         (https://www.rfc-editor.org/info/rfcXXXX); see the RFC
         itself for full legal notices.";
 
-     revision 2026-01-12 {
+     revision 2026-02-26 {
        description
          "Initial revision.";
        // RFC Ed.: replace XXXX and remove this comment
