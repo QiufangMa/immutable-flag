@@ -329,6 +329,11 @@ Table of Contents
 
                Figure 1: Augmentations to NETCONF Operations
 
+   To discover if the "with-immutability" parameter is supported by the
+   server, a NETCONF client can query if the server implements "ietf-
+   immutable-annotation" module by reading the YANG library information
+   from the operational state datastore, as per [RFC8526].
+
    Refer to Appendix B.1 for an example of NETCONF operation with "with-
    immutability" input parameter.
 
