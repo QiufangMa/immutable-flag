@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 2 October 2026                                         Ericsson
+Expires: 14 November 2026                                       Ericsson
                                                                    H. Li
                                                                      HPE
-                                                           31 March 2026
+                                                             13 May 2026
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 October 2026.
+   This Internet-Draft will expire on 14 November 2026.
 
 Copyright Notice
 
@@ -268,8 +268,8 @@ Table of Contents
    <rpc-error> element with an <error-tag> value of "invalid-value".
 
    Configuration data has the same immutability if it appears in
-   different read-write datastores.  The immutability of configuration
-   data is protocol and user independent.
+   different datastores.  The immutability of configuration data is
+   protocol and user independent.
 
 4.  "Immutable" Metadata Annotation
 
