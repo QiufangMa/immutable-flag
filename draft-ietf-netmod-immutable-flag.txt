@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 15 November 2026                                       Ericsson
+Expires: 27 November 2026                                       Ericsson
                                                                    H. Li
                                                                      HPE
-                                                             14 May 2026
+                                                             26 May 2026
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 November 2026.
+   This Internet-Draft will expire on 27 November 2026.
 
 Copyright Notice
 
@@ -1168,8 +1168,10 @@ B.5.  Immutability of the leaf-list
 
 B.6.  Error Response to Clients Overriding Immutable Configuration
 
-   Figure 4 provides examples of an attempt to override immutable
-   configuration and the error response that the server might return.
+   This section provides examples of clients attempts to override
+   immutable configuration and error responses that the server might
+   return.  Separate examples are provided for NETCONF and RESTCONF
+   protocols, in Figure 4 and Figure 5 respectively.
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -1206,8 +1208,41 @@ B.6.  Error Response to Clients Overriding Immutable Configuration
      </rpc-error>
    </rpc-reply>
 
-       Figure 4: An Example to Override Immutable Configuration with
-                               Error Response
+      Figure 4: A NETCONF Example to Override Immutable Configuration
+                            with Error Response
+
+   =============== NOTE: '\' line wrapping per RFC 8792 ================
+
+   PATCH /restconf/ds/ietf-datastores:running/example-user-group:user-\
+                        groups/group=administrator/access-level HTTP/1.1
+   Host: example.com
+   Content-Type: application/yang-data+json
+
+   {
+     "example-user-group:access-level": "guest"
+   }
+
+   HTTP/1.1 400 Bad Request
+   Content-Type: application/yang-data+json
+
+   {
+     "ietf-restconf:errors": {
+       "error": [
+         {
+           "error-type": "application",
+           "error-tag": "invalid-value",
+           "error-severity": "error",
+           "error-path": "/example-user-group:user-groups/group[name='\
+                                          administrator']/access-level",
+           "error-message": "Invalid access-level value due to the \
+                                     target node is marked as immutable"
+         }
+       ]
+     }
+   }
+
+      Figure 5: A RESTCONF Example to Override Immutable Configuration
+                            with Error Response
 
 Appendix C.  Existing Implementations
 
