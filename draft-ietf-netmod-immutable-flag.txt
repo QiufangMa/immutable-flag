@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 27 November 2026                                       Ericsson
+Expires: 28 November 2026                                       Ericsson
                                                                    H. Li
                                                                      HPE
-                                                             26 May 2026
+                                                             27 May 2026
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 November 2026.
+   This Internet-Draft will expire on 28 November 2026.
 
 Copyright Notice
 
@@ -117,7 +117,7 @@ Table of Contents
      B.3.  The Inheritance of Immutability
      B.4.  Immutability of the list
      B.5.  Immutability of the leaf-list
-     B.6.  Error Response to Clients Overriding Immutable
+     B.6.  Error Responses to Clients Overriding Immutable
            Configuration
    Appendix C.  Existing Implementations
    Acknowledgments
@@ -203,7 +203,7 @@ Table of Contents
 
    *  XXXX --> the assigned RFC number for this draft
 
-   *  2026-05-14 --> the actual date of the publication of this document
+   *  2026-05-26 --> the actual date of the publication of this document
 
 2.  Conventions and Definitions
 
@@ -496,7 +496,7 @@ Table of Contents
    This module imports definitions from [RFC7952], [RFC8342], [RFC8526],
    and [I-D.ietf-netmod-system-config].
 
-   <CODE BEGINS> file "ietf-immutable-annotation@2026-05-14.yang"
+   <CODE BEGINS> file "ietf-immutable-annotation@2026-05-26.yang"
    module ietf-immutable-annotation {
      yang-version 1.1;
      namespace "urn:ietf:params:xml:ns:yang:ietf-immutable-annotation";
@@ -560,7 +560,7 @@ Table of Contents
         (https://www.rfc-editor.org/info/rfcXXXX); see the RFC
         itself for full legal notices.";
 
-     revision 2026-05-14 {
+     revision 2026-05-26 {
        description
          "Initial revision.";
        // RFC Ed.: replace XXXX and remove this comment
@@ -1166,9 +1166,9 @@ B.5.  Immutability of the leaf-list
    but there is no way to delete the nodes from <intended> if those
    entries appear in <system>.
 
-B.6.  Error Response to Clients Overriding Immutable Configuration
+B.6.  Error Responses to Clients Overriding Immutable Configuration
 
-   This section provides examples of clients attempts to override
+   This section provides examples of client attempts to override
    immutable configuration and error responses that the server might
    return.  Separate examples are provided for NETCONF and RESTCONF
    protocols, in Figure 4 and Figure 5 respectively.
@@ -1202,7 +1202,7 @@ B.6.  Error Response to Clients Overriding Immutable Configuration
          /user-groups/group[name="administrator"]/access-level
        </error-path>
        <error-message xml:lang="en">
-         Invalid access-level value due to the target node is marked \
+         Invalid access-level value because the target node is marked \
                                                             as immutable
        </error-message>
      </rpc-error>
@@ -1234,7 +1234,7 @@ B.6.  Error Response to Clients Overriding Immutable Configuration
            "error-severity": "error",
            "error-path": "/example-user-group:user-groups/group[name='\
                                           administrator']/access-level",
-           "error-message": "Invalid access-level value due to the \
+           "error-message": "Invalid access-level value because the \
                                      target node is marked as immutable"
          }
        ]
