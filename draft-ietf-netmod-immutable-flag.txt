@@ -6,10 +6,10 @@ netmod                                                        Q. Ma, Ed.
 Internet-Draft                                                     Q. Wu
 Updates: 8040, 8526 (if approved)                                 Huawei
 Intended status: Standards Track                         B. Lengyel, Ed.
-Expires: 27 December 2026                                       Ericsson
+Expires: 1 January 2027                                         Ericsson
                                                                    H. Li
                                                                      HPE
-                                                            25 June 2026
+                                                            30 June 2026
 
 
               YANG Metadata Annotation for Immutable Flag
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 December 2026.
+   This Internet-Draft will expire on 1 January 2027.
 
 Copyright Notice
 
@@ -158,7 +158,7 @@ Table of Contents
    of some system-provided data, using a YANG metadata annotation
    [RFC7952] called "immutable" to flag which nodes are immutable.  A
    server MUST NOT set the immutable flag to true for configuration data
-   that is not system-provided.  This document does not regulate server
+   that is not system provided.  This document does not regulate server
    behaviors.  That said, it is expected that a server will return an
    error with an error-tag value of "invalid-value" if a client attempts
    to modify an immutable node.
@@ -913,7 +913,9 @@ Appendix B.  Examples of Server's Immutable Behavior
 
    This section provides some examples to illustrate the server's
    behavior with immutable flag.  These examples are not intended as
-   recommendations for real-world deployments.
+   recommendations for real-world deployments.  Long lines within
+   examples are handled in accordance with the line-wrapping specified
+   in [RFC8792].
 
    The following fictional module is used throughout this section:
 
